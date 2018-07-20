@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>The Cycling Feast</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/grayscale.css" rel="stylesheet">
+    <link href="/static/css/cyclingfeast.css" rel="stylesheet">
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">The Cycling Feast</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#intro">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#dataset">The Dataset</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#analysis">Exploratory Analysis</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#app">The App</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#aboutme">About Me</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contactme">Contact Me</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+          <h1 class="mx-auto my-0 text-uppercase">The Cycling Feast</h1>
+          <h2 class="text-white-50 mx-auto mt-2 mb-5">Want to Ride Italy?</h2>
+          <a href="#intro" class="btn btn-primary js-scroll-trigger">Get Started</a>
+        </div>
+        <div class="mx-auto text-center">
+          <a href="http://strava.com/" target="_blank">
+            <img class="tcf-opacity-50" src="/static/img/strava.png" class="img-fluid" alt="">
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="intro" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">The Cycling Feast</h2>
+            <p class="text-white-50">
+              <b>Road cycling</b> and <b>mountain biking</b> have been steadily growing in popularity in recent years due to the
+              beneficial effects on health and well-being. This has been fueling an increasing interest in services for amateur riders, ranging from
+              professional training programs, "cycling feasts" as well as travel-agency services and bike and component manufactures.
+              Getting data to help highlight the trend of <i>"novel recruits"</i> can be fundamental to refine the aforementioned services
+              and provide a better target for business.
+            </p>
+            <p class="text-white-50">
+              Among the others, <a href="http://strava.com/" target="_blank">Strava</a>, dubbed as <i>"The Social Network of Athletes"</i> is by far the most
+              well-regarded Web and mobile platform adopted by cyclists to track their activities.
+              Since its start in 2009, both recreational and professional cyclists have been increasingly used the service to upload their activities
+              and connect (or follow) others. One of the most peculiar features is that of segment: users can create public segments, custom road/off-road
+              paths (corresponding to roads and trails in the real world) where community members can compete to obtain the best time and become the
+              KOM (King of the Mountain) or QOM (Queen of the Mountain).
+            </p>
+            <p class="text-white-50">
+              Though most of the data is (reasonably) kept strictly private, data related to segment attempts is publicly available (in an anonymized form)
+              via <i>Strava REST API</i>, allowing in principle to infer trends on the popularity of cycling as a recreational sport among people.
+              More specifically, I exploited the API to download the details of more than 8.000 hill and mountain climbs located in Italy: I chose Italy
+              because of its "reputation" as a region of cyclists, furthermore I focused just on <i>climbs</i> as <i>those represent both a dream and a fear
+              for any amateur and, among the others, one of the reasons for a fan of cycling and/or mountain biking to ride her bike.</i>
+
+              Additionally, as can be intuitively seen in the image below
+            </p>
+              <p><img class="tcf-opacity-50" src="/static/img/italy-land.png" class="img-fluid" alt=""></p>
+            <p class="text-white-50">
+              Italy is mostly hills and mountains, precisely, <i>hills and mountains account for around <b>80%</b> of the whole Italy's territory</i>, as such we can safely state that
+              climbs alone, beyond being very popular among cyclists, give quite a representative sample of "geographical riding habits" in Italy.
+
+              So that is why, in the end, I believe that climbs can be a good starting point to depict a representative trend of the whole amateur cycling community.
+            </p>
+            <p class="text-white-50">
+              Along with section details, such as average grade, length, elevation difference and so far, I downloaded also details of any single attempt on these segments:
+              preliminary data analysis showed pretty clear trend of novel bike riders over the past few years and a strong correlation between turistic locations and
+              concentration of rides. Also, time of the year and day of the week represent good indicators to discover popularity of a particular place among cyclists.
+            </p>
+            <p class="text-white-50">
+             The ultimate goal of the project is to leverage machine learning techniques to devise models able to predict the trend (the amount) of bike rides is specific locations,
+              as base to <b>develop an application to suggest bike riders the best places in Italy for cycling fans to go</b>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="dataset" class="about-section text-left">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">The Dataset</h2>
+            <p class="text-white-50">
+              The dataset has been generated via exploitation of the <a href="https://strava.github.io/api/v3/" target="_blank">Strava REST API</a>.
+            <br/><br/>
+               We focused on <i>Segments</i> in order to explore and gather the data of public segments located in Italy along with the corresponding <i>efforts</i>:
+               this data is publicly available once you register on Strava since does not contain sensitive information about platform' users.
+                In particular, we used these REST endpoint:
+                <ul class="text-white-50">
+                 <li><a href="https://strava.github.io/api/v3/segments/#explore">segment explorer</a>, in order to scan the geographical area of interest for relevant segments;
+                 </li>
+                 <li><a href="https://strava.github.io/api/v3/segments/#efforts">list efforts</a> so as to collect the comprehensive list of efforts for every segment previously collected via the segment explorer endpoint.
+                 </li>
+               </ul>
+              <br/><br/>
+              <span class="text-white-50">
+              We limited the scope of the search to <i>climb segments</i> as hills and mountains can be a well representative sample of road cyclists and mountain bikers' behavior in Italy.
+              Data as been collected using <i>Python</i>, exploiting <i>requests</i> module and leveraging the flexibility of <i>Pandas</i> so as to arrange the dataset in csv files.
+            The resulting files and their corresponding content is described in the following sections.</span>
+            </p>
+          </p>
+          <h3 class="text-white mb-4">Segments</h3>
+          <p class="text-white-50">
+            Segments are paths created by Strava users that can be shared with other members: riders can virtually "compete"
+          on these segments to complete them in the shortest time possible. Segments' data can be found at
+          <a href="https://github.com/mcRoot/thecyclingfeast/blob/master/dataset/strava_segments_italy_DEF.csv" target="_blank">strava_segments_italy.csv</a>.
+            <br/>
+            The file contains the details of around <i>6000</i> "climb" segments located in Italy covering mostly the Appennines the Alps.
+            For each segment, a record is provided, showing several features:
+            <ul class="text-white-50">
+            <li>a <i>unique integer id</i> of the segment;</li>
+             <li>the <i>name</i> of the segment (e.g. Mont Blanc climb);</li>
+            <li>the <i>average grade</i>;</li>
+             <li>the <i>climb category</i>, from 1 (easiest) to 5 (the so called "horse categorie");</li>
+            <li>the <i>total distance</i> in meters;</li>
+             <li>the <i>elevation difference</i> in meters;</li>
+            <li>the data related to <i>start</i> and <i>end latitude</i> and <i>longitude</i>.</li>
+           </ul>
+          </p>
+            <h3 class="text-white mb-4">Efforts</h3>
+          <p class="text-white-50">
+            The data related to efforts are organized in a series of csv files, containing the details of around <i>6,000,000</i> different efforts on the <i>6000</i>
+            climbs downloaded. An <i>effort</i> corresponds to a unique attempt at completing a segment by an athlete. The downloaded efforts correspond to rides made mostly
+            in the period from 2009 - January 2018, though, due to data errors, there are more than <i>200</i> activities featuring unlikely years, either way too in the past
+            (1970) or in the future (2019 and further!): this is probably caused by wrong datetime setup on bike computers or smartphones used by athletes
+            to upload their activities.
+            <br/><br/>
+            Some or the relevant data for each effort:
+            <ul class="text-white-50">
+            <li>the anonymized <i>athlete name</i> (only first name displayed);</li>
+            <li>the <i>start date</i> in GMT timezone along with the <i>start date</i> in <i>local</i> timezone;</li>
+            <li>the <i>elapsed time</i> (in seconds), i.e. the total time spent on the segment since start datetime;</li>
+             <li>the <i>moving time</i> (in seconds), i.e. the total time the rider was actually pedalling (this time is usually equal or less than elapsed time);</li>
+            <li>the <i>rank</i>, i.e. the position of the effort on the leaderboard, based on elapsed time, where 1 means KOM/QOM (King of the Mountain/Queen of the Mountain).</li>
+           </ul>
+          </p>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="analysis" class="about-section text-left">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">Exploratory Analysis</h2>
+            <p class="text-white-50">
+
+          </p>
+        </div>
+        </div>
+      </div>
+    </section>
+    <section id="app" class="app-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div id="tcf-container" style="width: 100%; height: 700px; position: relative; outline: none;" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+            <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+            <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+
+            <form class="form-inline d-flex">
+              <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
+              <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contactme" class="contact-section bg-black">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Address</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">Via G. Boschi 91/A, Faenza (RA) - Italy</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-envelope text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Email</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">
+                  <a href="#">matteo.casadei@gmail.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Mobile</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">+39 348 0022450</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social d-flex justify-content-center">
+          <a class="mx-2" href="https://www.linkedin.com/in/matteocasadei/" target="_blank">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a class="mx-2" href="https://github.com/mcRoot/thecyclingfeast" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+      <div class="container">
+        Copyright &copy; The Cycling Feast - Matteo Casadei 2018
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/static/vendor/font-awesome/js/all.js"></script>
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="/static/js/grayscale.min.js"></script>
+
+    <!-- geo maps-->
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  <script src="/static/js/datamaps.ita.min.js"></script>
+  <script>
+      var map = new Datamap({
+        scope: 'ita',
+        element: document.getElementById('tcf-container'),
+        setProjection: function (element) {
+          var projection = d3.geo.mercator()
+              .center([12.560077144500099, 41.287229413500036])
+              .rotate([0, 0])
+              .scale(3000)
+              .translate([350, 425]);
+          var path = d3.geo.path()
+              .projection(projection);
+          return {path: path, projection: projection};
+        },
+        fills: {
+          defaultFill: '#B05E1C',
+          lt50: 'rgba(0,244,244,0.9)',
+          gt50: 'red'
+        },
+        data: {
+          '071': {fillKey: 'lt50'},
+          '001': {fillKey: 'gt50'}
+        }
+      });
+      // Alternatively with d3
+      d3.select(window).on('resize', function() {
+          map.resize();
+      });
+  </script>-->
+  <script src="/static/js/italy-regions.js"></script>
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+    <script>
+      var mymap = L.map('tcf-container').setView([42, 12], 6);
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          maxZoom: 18,
+          id: 'mapbox.light',
+          accessToken: 'pk.eyJ1IjoibWNyb290IiwiYSI6ImNqanNwZjM4bTJ5Ynczd3FxY2lhOG9vczUifQ.cdD3Wy507vgPphiKU1Cevg'
+      }).addTo(mymap);
+
+      function style(feature) {
+          return {
+              fillColor: '#B05E1C',
+              weight: 2,
+              opacity: 0.5,
+              color: '#B05E1C',
+              dashArray: '1',
+              fillOpacity: 0.6
+          };
+      }
+
+      var info = L.control();
+
+      info.onAdd = function (mymap) {
+          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          //this.update();
+          return this._div;
+      };
+
+      // method that we will use to update the control based on feature properties passed
+      info.update = function (props) {
+          this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+              '<b>' + props.name + '</b><br /> people'
+              : 'Hover over a state');
+      };
+
+      function highlightFeature(e) {
+          var layer = e.target;
+
+          layer.setStyle({
+              weight: 5,
+              color: '#666',
+              dashArray: '',
+              fillOpacity: 0.7
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+
+          info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+          geojson.resetStyle(e.target);
+          info.update();
+      }
+
+      function zoomToFeature(e) {
+          mymap.fitBounds(e.target.getBounds());
+          computedensity();
+      }
+
+      function computedensity() {
+        for(var i=0;i<100;i++) {
+           lat = 40.0 + Math.floor(Math.random() * 3);
+           lon = 11.0 + Math.floor(Math.random() * 3);
+           var circle = L.circle([lat, lon], {
+             color: 'red',
+             fillColor: '#f03',
+             fillOpacity: 0.5,
+             radius: 5
+           }).addTo(mymap);
+        }
+      }
+
+      function onEachFeature(feature, layer) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+      }
+
+      geojson = L.geoJson(italy_regions, {style: style,onEachFeature: onEachFeature}).addTo(mymap);
+      info.addTo(mymap);
+
+
+    </script>
+  </body>
+
+</html>

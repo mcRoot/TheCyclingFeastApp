@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import mc.tcf.config as config
-from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
@@ -9,15 +8,22 @@ from sklearn.externals import joblib
 
 app = Flask(__name__)
 
-if not os.path.isfile(config.app_config["ml_model_name"]):
-    utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
+@app.before_first_request
+def load_models():
+    from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
+    global ml
+    global sm
+    global ensemble
+    if not os.path.isfile(config.app_config["ml_model_name"]):
+        utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
 
-if config.app_config['ml_load_model']:
-    ml_model_path = config.app_config['ml_model_name']
-    ensemble = joblib.load(ml_model_path)
+    if config.app_config['ml_load_model']:
+        ml_model_path = config.app_config['ml_model_name']
+        ensemble = joblib.load(ml_model_path)
 
-ml = manager.MLManager(config, ensemble)
-sm = manager.SegmentsManager(config)
+    ml = manager.MLManager(config, ensemble)
+    sm = manager.SegmentsManager(config)
+
 
 @app.route('/thecyclingfeast')
 def thecyclingfeast():

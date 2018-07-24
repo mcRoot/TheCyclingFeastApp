@@ -3,18 +3,8 @@ import os
 import pandas as pd
 from datetime import datetime
 import numpy as np
-from sklearn.neighbors import KernelDensity
-import matplotlib.pyplot as plt
-import geojsoncontour
-import mc.tcf.colormaps as cmaps
 
 class MLManager():
-
-    def __init__(self, config):
-        self.config = config
-        self.ml_client = client.MLClient(config)
-        plt.register_cmap(name='viridis', cmap=cmaps.viridis)
-        plt.set_cmap(cmaps.viridis)
 
     def predict(self, X):
         return self.ml_client.predict(X)

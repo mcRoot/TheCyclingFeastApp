@@ -1,15 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import render_template, redirect, url_for
 import mc.tcf.config as config
 from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
+import __main__
+from __main__ import ColumnSelectTransformer, ResidualEstimator
+
 from sklearn.externals import joblib
-from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 
 def load_models():
-    ColumnSelectTransformer.__module__ = '__main__'
-    ResidualEstimator.__module__ = '__main__'
     global ml
     global sm
     global ensemble

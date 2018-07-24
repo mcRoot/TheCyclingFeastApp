@@ -3,8 +3,6 @@ from mc.tcf.client import MLClient
 import mc.tests.test_config as test_config
 import mc.tests.test_data as data
 
-from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
-
 c = 0
 
 def config_client():

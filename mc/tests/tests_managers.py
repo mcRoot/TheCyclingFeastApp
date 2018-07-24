@@ -3,7 +3,6 @@ import mc.tcf.manager as managers
 import mc.tests.test_config as test_config
 import time
 
-from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 
 class MLManagerTestCase(unittest.TestCase):
 

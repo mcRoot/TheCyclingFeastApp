@@ -5,12 +5,11 @@ from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
 from sklearn.externals import joblib
+from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 
 app = Flask(__name__)
 
-@app.before_first_request
 def load_models():
-    from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
     global ml
     global sm
     global ensemble
@@ -46,5 +45,7 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
-  from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
+  ColumnSelectTransformer.__module__ = '__main__'
+  ResidualEstimator.__module__ = '__main__'
+  load_models()
   app.run(port=8080)

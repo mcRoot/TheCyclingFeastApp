@@ -292,3 +292,9 @@ footer {
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
 }
+
+/*custom to optimize heatmaps*/
+html, body, #tcf-container {
+    height: 100%;
+    width: 100vw;
+}

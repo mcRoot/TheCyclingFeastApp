@@ -3,9 +3,13 @@ import mc.tcf.config as config
 from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from mc.tcf import manager
 from flask import Flask,jsonify,json
+from mc.tcf import utils
+import os
 
 app = Flask(__name__)
 
+if not os.path.isfile(config.app_config["ml_model_name"]):
+    utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
 ml = manager.MLManager(config)
 sm = manager.SegmentsManager(config)
 

@@ -10,8 +10,8 @@ messages = {
 
 app_config = {
     "ml_load_model": os.environ.get('LOAD_MODEL', True),
-    "ml_model_name": "ensemble_rf_estimator.pkl",
-    "ml_base_dir": os.environ.get('ML_MODEL_DIR', "ml/resources"),
+    "ml_model_name": "./ensemble_rf_estimator.pkl",
+    "ml_base_url": os.environ.get('ML_MODEL_URL', "ml/resources"),
     "segments_csv_name": "strava_segments.csv",
     "segments_base_dir": os.environ.get('SEGMENTS_DIR', "resources"),
     "strava_kickoff_year": 2009

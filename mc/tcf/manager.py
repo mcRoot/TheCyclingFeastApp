@@ -6,6 +6,10 @@ import numpy as np
 
 class MLManager():
 
+    def __init__(self, config):
+        self.config = config
+        self.ml_client = client.MLClient(config)
+
     def predict(self, X):
         return self.ml_client.predict(X)
 

@@ -7,9 +7,9 @@ import os
 from sklearn.externals import joblib
 from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 
-app = Flask(__name__)
-
 def load_models():
+    ColumnSelectTransformer.__module__ = '__main__'
+    ResidualEstimator.__module__ = '__main__'
     global ml
     global sm
     global ensemble
@@ -22,6 +22,10 @@ def load_models():
 
     ml = manager.MLManager(config, ensemble)
     sm = manager.SegmentsManager(config)
+
+load_models()
+
+app = Flask(__name__)
 
 
 @app.route('/thecyclingfeast')
@@ -45,7 +49,4 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
-  ColumnSelectTransformer.__module__ = '__main__'
-  ResidualEstimator.__module__ = '__main__'
-  load_models()
   app.run(port=8080)

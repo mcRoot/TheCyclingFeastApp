@@ -1,10 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import mc.tcf.config as config
-from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
+#from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
+
+from scipy.sparse import lil_matrix
+import sklearn.base as base
+import numpy as np
+class ResidualEstimator(base.BaseEstimator, base.RegressorMixin):
+    pass
+
+class ColumnSelectTransformer(base.BaseEstimator, base.TransformerMixin):
+    pass
 
 app = Flask(__name__)
 

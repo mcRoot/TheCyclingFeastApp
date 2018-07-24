@@ -4,16 +4,15 @@ from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
-import __main__
-from __main__ import ColumnSelectTransformer, ResidualEstimator
-
+from mc.tcf.ml.models import  ColumnSelectTransformer, ResidualEstimator
 from sklearn.externals import joblib
+
 
 def load_models():
     global ml
     global sm
     global ensemble
-    if not os.path.isfile(config.app_config["ml_model_name"]):
+    if config.app_config["force_model_download"] or not os.path.isfile(config.app_config["ml_model_name"]):
         utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
 
     if config.app_config['ml_load_model']:

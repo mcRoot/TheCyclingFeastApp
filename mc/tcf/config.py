@@ -9,6 +9,7 @@ messages = {
 }
 
 app_config = {
+    "force_model_download": os.environ.get('FORCE_MODEL_DOWNLOAD', False),
     "ml_load_model": os.environ.get('LOAD_MODEL', True),
     "ml_model_name": "./ensemble_rf_estimator.pkl",
     "ml_base_url": os.environ.get('ML_MODEL_URL', "ml/resources"),

@@ -34,4 +34,5 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
+  from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
   app.run(port=8080)

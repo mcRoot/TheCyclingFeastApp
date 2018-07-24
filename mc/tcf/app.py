@@ -1,25 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import mc.tcf.config as config
-#from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
+from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
-
-from scipy.sparse import lil_matrix
-import sklearn.base as base
-import numpy as np
-class ResidualEstimator(base.BaseEstimator, base.RegressorMixin):
-    pass
-
-class ColumnSelectTransformer(base.BaseEstimator, base.TransformerMixin):
-    pass
+from sklearn.externals import joblib
 
 app = Flask(__name__)
 
 if not os.path.isfile(config.app_config["ml_model_name"]):
     utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
-ml = manager.MLManager(config)
+
+if config.app_config['ml_load_model']:
+    ml_model_path = config.app_config['ml_model_name']
+    ensemble = joblib.load(ml_model_path)
+
+ml = manager.MLManager(config, ensemble)
 sm = manager.SegmentsManager(config)
 
 @app.route('/thecyclingfeast')

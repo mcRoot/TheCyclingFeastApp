@@ -7,7 +7,7 @@ import os
 from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from sklearn.externals import joblib
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 if config.app_config["force_model_download"] or not os.path.isfile(config.app_config["ml_model_name"]):
     utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
@@ -20,15 +20,15 @@ ml = manager.MLManager(config, ensemble)
 sm = manager.SegmentsManager(config)
 
 
-@app.route('/thecyclingfeast')
+@application.route('/thecyclingfeast')
 def thecyclingfeast():
     return render_template('index.html')
 
-@app.route('/')
+@application.route('/')
 def index():
   return redirect(url_for("thecyclingfeast"))
 
-@app.route('/training/<region>/predict', methods=['GET'])
+@application.route('/training/<region>/predict', methods=['GET'])
 def predict(region=None):
   segments = sm.prepare_for_predict(region, 7)
   y_hat = ml.predict(segments)
@@ -36,9 +36,10 @@ def predict(region=None):
   jsonStr = json.dumps(geojson)
   return jsonify(jsonStr)
 
-@app.route('/version')
+@application.route('/version')
 def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
-  app.run()
+  application.debug = True
+  application.run()

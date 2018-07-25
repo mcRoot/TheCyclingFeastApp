@@ -7,6 +7,7 @@ import os
 from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from sklearn.externals import joblib
 
+app = Flask(__name__)
 
 if config.app_config["force_model_download"] or not os.path.isfile(config.app_config["ml_model_name"]):
     utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
@@ -18,8 +19,6 @@ if config.app_config['ml_load_model']:
 ml = manager.MLManager(config, ensemble)
 sm = manager.SegmentsManager(config)
 
-application = Flask(__name__)
-app = application
 
 @app.route('/thecyclingfeast')
 def thecyclingfeast():
@@ -42,4 +41,4 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
-  app.run(port=8080)
+  app.run()

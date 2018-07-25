@@ -1,1 +1,1 @@
-web: gunicorn mc.tcf.app:app
+web: gunicorn mc.tcf.app:app --timeout 120

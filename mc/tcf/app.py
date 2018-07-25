@@ -4,7 +4,7 @@ from mc.tcf import manager
 from flask import Flask,jsonify,json
 from mc.tcf import utils
 import os
-from mc.tcf.ml.models import  ColumnSelectTransformer, ResidualEstimator
+from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from sklearn.externals import joblib
 
 

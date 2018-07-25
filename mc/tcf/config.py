@@ -11,7 +11,7 @@ messages = {
 app_config = {
     "force_model_download": os.environ.get('FORCE_MODEL_DOWNLOAD', False),
     "ml_load_model": os.environ.get('LOAD_MODEL', True),
-    "ml_model_name": "./ensemble_rf_estimator.pkl",
+    "ml_model_name": "ensemble_rf_estimator.pkl",
     "ml_base_url": os.environ.get('ML_MODEL_URL', "ml/resources"),
     "segments_csv_name": "strava_segments.csv",
     "segments_base_dir": os.environ.get('SEGMENTS_DIR', "resources"),

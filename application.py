@@ -8,21 +8,15 @@ from mc.tcf.ml.models import ColumnSelectTransformer, ResidualEstimator
 from sklearn.externals import joblib
 
 
-def load_models():
-    global ml
-    global sm
-    global ensemble
-    if config.app_config["force_model_download"] or not os.path.isfile(config.app_config["ml_model_name"]):
-        utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
+if config.app_config["force_model_download"] or not os.path.isfile(config.app_config["ml_model_name"]):
+    utils.download_file_from_google_drive(config.app_config["ml_base_url"], config.app_config["ml_model_name"])
 
-    if config.app_config['ml_load_model']:
-        ml_model_path = config.app_config['ml_model_name']
-        ensemble = joblib.load(ml_model_path)
+if config.app_config['ml_load_model']:
+    ml_model_path = config.app_config['ml_model_name']
+    ensemble = joblib.load(ml_model_path)
 
-    ml = manager.MLManager(config, ensemble)
-    sm = manager.SegmentsManager(config)
-
-#load_models()
+ml = manager.MLManager(config, ensemble)
+sm = manager.SegmentsManager(config)
 
 application = Flask(__name__)
 app = application
@@ -48,5 +42,4 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
-  load_models()
   app.run(port=8080)

@@ -22,10 +22,10 @@ def load_models():
     ml = manager.MLManager(config, ensemble)
     sm = manager.SegmentsManager(config)
 
-load_models()
+#load_models()
 
-app = Flask(__name__)
-
+application = Flask(__name__)
+app = application
 
 @app.route('/thecyclingfeast')
 def thecyclingfeast():
@@ -48,4 +48,5 @@ def version():
   return 'The Cycling Feast v. 1.0'
 
 if __name__ == '__main__':
+  load_models()
   app.run(port=8080)

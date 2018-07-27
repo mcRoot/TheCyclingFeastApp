@@ -15,17 +15,17 @@ class MLManager():
 
     def do_density(self, X, y_hat, region, period):
         X['num_trainings'] = y_hat
-        df = X.groupby("segment").aggregate({"num_trainings": "sum", "s_lat": "first", "s_lng": "first"})
-        df_kde = df.set_index(['s_lat', 's_lng'])['num_trainings'].repeat(np.log(df['num_trainings']).astype(int)).reset_index()
+        df_sorted = X.groupby("segment").aggregate({"num_trainings": "sum", "s_lat": "first", "s_lng": "first"})
+        df_kde = df_sorted.set_index(['s_lat', 's_lng'])['num_trainings'].repeat(np.log(df_sorted['num_trainings']).astype(int)).reset_index()
         X['road_index'] = X['roads'] + X['loc_name'].str.strip()
-        df = pd.merge(df, X[['road_index', 'segment']], left_on='segment', right_on='segment').drop_duplicates(subset='segment', keep='first')
-        df_sorted = df.sort_values("num_trainings", ascending=False)#[0:10]
+        df_sorted = pd.merge(df_sorted, X[['road_index', 'segment']], left_on='segment', right_on='segment').drop_duplicates(subset='segment', keep='first')
+        df_sorted = df_sorted.sort_values("num_trainings", ascending=False)#[0:10]
         df_sorted = df_sorted.drop_duplicates(subset='road_index', keep='first')[0:10]
         df_sorted = df_sorted.set_index('segment')
-        descr = df['num_trainings'].quantile([0.25, 0.5, 0.75, 1.0])
-        total_num_rides = df['num_trainings'].sum()
-        min_rides = df['num_trainings'].min()
-        max_rides = df['num_trainings'].max()
+        descr = df_sorted['num_trainings'].quantile([0.25, 0.5, 0.75, 1.0])
+        total_num_rides = df_sorted['num_trainings'].sum()
+        min_rides = df_sorted['num_trainings'].min()
+        max_rides = df_sorted['num_trainings'].max()
         best_segments = X[X['segment'].isin(df_sorted.index.values)].sort_values(["segment", "Dow"])[['s_lat', 's_lng', "roads", "loc_name", "name", "Dow", "segment", "num_trainings"]]
         res = np.vstack([df_kde['s_lat'], df_kde['s_lng']]).T
         json_segments = {}

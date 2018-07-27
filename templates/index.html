@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 
     <!-- Custom fonts for this template -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
@@ -23,7 +24,7 @@
 
     <!-- leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
-
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.css" rel='stylesheet' />
   </head>
 
   <body id="page-top">
@@ -79,8 +80,40 @@
       </div>
     </header>
 
-    <section id="app" class="app-section text-center">
+    <section id="app" class="app-section text-left">
       <div class="container">
+        <div class="row">
+           <div class="col-sm-12 mx-auto">
+            <h2 class="text-black sm-4 text-center">Predict Rides!</h2>
+            <p class="text-black-50">
+              <b>Are you planning to visit Italy and are a eager bike rider?</b> This application helps you find
+              the best Italy's locations for bike riders. Enjoy your rides in Italy then!
+            </p>
+             <p class="text-black-50">
+              Just select the period of your visit and, on the map, click on a region you plan to visit.
+               Artificial intelligence will crunch numbers under the hood and <b>predict popular areas for cycling</b>,
+               showing also the top-10 climbs in the region.
+            </p>
+            <p class="text-black-50">
+              <b>Now you have no more excuse for leaving your bike home!</b>
+            </p>
+           </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4" >&nbsp;</div>
+           <div class="col-sm-4">
+              <div class="form-group">
+                  <label for="datetimepicker1">When you want to ride?</label>
+                  <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                      <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                      <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-4" >&nbsp;</div>
+        </div>
         <div class="row">
           <div class="col-sm-12 mx-auto">
             <div id="tcf-container" style="width: 100%; height: 500px; position: relative; outline: none;" />
@@ -306,52 +339,40 @@
     <script src="/static/vendor/font-awesome/js/all.js"></script>
     <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
+    <!-- d3js for legend -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+    <!-- for datetime picker -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
     <!-- Custom scripts for this template -->
     <script src="/static/js/grayscale.min.js"></script>
 
-    <!-- geo maps-->
-  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-  <script src="/static/js/datamaps.ita.min.js"></script>
-  <script>
-      var map = new Datamap({
-        scope: 'ita',
-        element: document.getElementById('tcf-container'),
-        setProjection: function (element) {
-          var projection = d3.geo.mercator()
-              .center([12.560077144500099, 41.287229413500036])
-              .rotate([0, 0])
-              .scale(3000)
-              .translate([350, 425]);
-          var path = d3.geo.path()
-              .projection(projection);
-          return {path: path, projection: projection};
-        },
-        fills: {
-          defaultFill: '#B05E1C',
-          lt50: 'rgba(0,244,244,0.9)',
-          gt50: 'red'
-        },
-        data: {
-          '071': {fillKey: 'lt50'},
-          '001': {fillKey: 'gt50'}
-        }
-      });
-      // Alternatively with d3
-      d3.select(window).on('resize', function() {
-          map.resize();
-      });
-  </script>-->
+    <!-- for dow charts -->
+    <script src="https://cdnjs.com/libraries/Chart.js"></script>
+
   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.js"></script>
+  <script src="http://rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
   <script src="/static/js/italy-regions.js"></script>
   <script src="/static/js/spin.js"></script>
   <script src="/static/js/leaflet.spin.min.js"></script>
   <script src="/static/js/leaflet.ajax.min.js"></script>
   <script src="/static/js/leaflet-heat.js"></script>
+  <script src="/static/js/thecyclingfeast.js"></script>
   <script>
       var mymap = L.map('tcf-container').setView([42, 12], 6);
+      mymap.options.minZoom = 2;
+      mymap.options.maxZoom = 19;
+      var gl = L.mapboxGL({
+          accessToken: 'pk.eyJ1IjoibWNyb290IiwiYSI6ImNqanNwZjM4bTJ5Ynczd3FxY2lhOG9vczUifQ.cdD3Wy507vgPphiKU1Cevg',
+          style: 'https://openmaptiles.github.io/toner-gl-style/style-cdn.json'
+      }).addTo(mymap);
+      //mymap.fitWorld();
 
-      var CartoDB_VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+      /*var CartoDB_VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
           subdomains: 'abcd',
           maxZoom: 19
@@ -359,7 +380,7 @@
       var Hydda_RoadsAndLabels = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/roads_and_labels/{z}/{x}/{y}.png', {
           maxZoom: 18,
           attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(mymap);
+      }).addTo(mymap);*/
       mymap.getPane("overlayPane").style.opacity=0.8
 
 
@@ -373,20 +394,44 @@
           };
       }
 
-      var info = L.control();
+      var info = L.control({position: 'bottomright'});
       var heatmap;
+      var legend;
+      var markers = [];
 
       info.onAdd = function (mymap) {
-          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-          //this.update();
-          return this._div;
+            var div = L.DomUtil.create('div', 'info legend')
+            var title = L.DomUtil.create('div', 'title')
+            div.appendChild(title)
+            title.innerHTML = '<p>Ride density levels:<p>'
+            var td = L.DomUtil.create('div')
+            div.appendChild(td)
+
+            for (var i = 0; i < 18; i++) {
+                td.innerHTML += '&nbsp;';
+            }
+            td.innerHTML += 0.4 + '&nbsp;&nbsp;&nbsp;' + 0.6 + '&nbsp;&nbsp;&nbsp;' + 0.7 + '&nbsp;&nbsp;&nbsp;' + 0.8 + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + 1;
+
+            var c = L.DomUtil.create('canvas')
+            c.setAttribute('height', '60')
+            var ctx = c.getContext("2d");
+            var grd = ctx.createLinearGradient(0, 0, 240, 0);
+            grd.addColorStop(0.4, "blue");
+            grd.addColorStop(0.6, "cyan");
+            grd.addColorStop(0.7, "lime");
+            grd.addColorStop(0.8, "yellow");
+            grd.addColorStop(1, "red");
+            ctx.fillStyle = grd;
+            ctx.fillRect(20, 2, 240, 30);
+            div.appendChild(c)
+            div.appendChild(L.DomUtil.create('div', 'stats'))
+            return div;
       };
 
       // method that we will use to update the control based on feature properties passed
-      info.update = function (props) {
-          this._div.innerHTML = '<h4>Predict Number of Rides</h4>' +  (props ?
-              'Region: <b>' + props.name + '</b><br />'
-              : 'Hover on a region and click to make a prediction');
+      info.update = function (region, period, props) {
+        stat_text = '<p>Predicted rides for <em>' + period + '</em> in <em>' + region + '</em>: </p><ul><li>Total: <b>' + parseInt(props['tot']) + '</b> unique rides</li></ul>';
+        stats = $('.stats').html(stat_text);
       };
 
       function highlightFeature(e) {
@@ -403,29 +448,93 @@
               layer.bringToFront();
           }
 
-          info.update(layer.feature.properties);
+          //info.update(layer.feature.properties);
       }
 
       function resetHighlight(e) {
           geojson.resetStyle(e.target);
-          info.update();
+          //info.update();
+      }
+
+      function removeMarkers() {
+        while (markers.length > 0) {
+          m = markers.pop();
+          mymap.removeLayer(m);
+        }
       }
 
       function zoomToFeature(e, layer) {
           if (heatmap != undefined)
             mymap.removeLayer(heatmap);
+          if (legend != undefined)
+            mymap.removeLayer(legend);
+          removeMarkers();
           mymap.spin(true);
           mymap.setView(e.target.getCenter(), 7);
           //mymap.fitBounds(e.target.getBounds());
           computedensity(e.target.feature.properties.id, layer);
       }
 
+      function addLegend(points) {
+        var legend = L.control({position: 'bottomright'});
+
+        legend.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'info legend')
+            var td = L.DomUtil.create('div')
+            div.appendChild(td)
+
+            for (var i = 0; i < 18; i++) {
+                td.innerHTML += '&nbsp;';
+            }
+            td.innerHTML += 0.4 + '&nbsp;&nbsp;&nbsp;' + 0.6 + '&nbsp;&nbsp;&nbsp;' + 0.7 + '&nbsp;&nbsp;&nbsp;' + 0.8 + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + 1;
+
+            var c = L.DomUtil.create('canvas')
+            var ctx = c.getContext("2d");
+            var grd = ctx.createLinearGradient(0, 0, 240, 0);
+            grd.addColorStop(0.4, "blue");
+            grd.addColorStop(0.6, "cyan");
+            grd.addColorStop(0.7, "lime");
+            grd.addColorStop(0.8, "yellow");
+            grd.addColorStop(1, "red");
+            ctx.fillStyle = grd;
+            ctx.fillRect(20, 2, 240, 30);
+            div.appendChild(c)
+            return div;
+        };
+
+        return legend.addTo(mymap);;
+      }
+
+      function addBestSegments(segments) {
+        for (var seg in segments) {
+          curr = JSON.parse(segments[seg]);
+          lat = curr[0]['s_lat'];
+          lng = curr[0]['s_lng'];
+          name = curr[0]['name'];
+          id = curr[0]['segment'];
+          seg_url = segment_url + id;
+          html = "<b>" + name + "</b><p><a href='" + seg_url + "' target='_blank'>See on Strava</a></p>";
+          var marker = L.marker([lat, lng]).addTo(mymap);
+          marker.setOpacity(0.7);
+          marker.bindPopup(html);
+          markers.push(marker);
+
+        }
+      }
+
+
       function computedensity(id, layer) {
         $.ajax("/training/" + id + "/predict", {
+          "data": {'period': $('#datetimepicker1 input').val()},
           "success": function(data) {
               res = JSON.parse(data);
-              var heat = L.heatLayer(res["res"], {minOpacity: 0.01, radius: 12, blur: 24, maxZoom: 7, gradient: {0.1: "#440154", 0.25:"#404788", 0.5:"#238A8D", 0.75:"#55C667", 1.0:"#FDE725"}}).addTo(mymap);
-               heatmap = heat
+               var heat = L.heatLayer(res["res"], {minOpacity: 0.01, radius: 10, blur: 27, maxZoom: 7}).addTo(mymap);
+               heatmap = heat;
+               //if (legend === undefined)
+               // legend = addLegend(res["legend"]);
+               info.update(res['region_name'], res['period'], res['stats']);
+               addBestSegments(res['best_segments']);
                mymap.spin(false);
           },
           "error": function() {
@@ -447,6 +556,14 @@
 
       geojson = L.geoJson(italy_regions, {style: style,onEachFeature: onEachFeature}).addTo(mymap);
       info.addTo(mymap);
+
+
+      $('#datetimepicker1').datetimepicker({
+        format: "MM/YYYY",
+        viewMode: "years",
+        defaultDate: '07/01/2018'
+      });
+
 
 
     </script>

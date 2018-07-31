@@ -25,6 +25,9 @@
     <!-- leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.css" rel='stylesheet' />
+
+    <!--charting -->
+    <link rel="stylesheet" href="/static/css/suave-charts.css" />
   </head>
 
   <body id="page-top">
@@ -351,7 +354,10 @@
     <script src="/static/js/grayscale.min.js"></script>
 
     <!-- for dow charts -->
-    <script src="https://cdnjs.com/libraries/Chart.js"></script>
+    <!--<script src="/static/js/raphael-min.js"></script>
+    <script src="/static/js/charts-min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
   <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.js"></script>
@@ -473,6 +479,7 @@
           mymap.setView(e.target.getCenter(), 7);
           //mymap.fitBounds(e.target.getBounds());
           computedensity(e.target.feature.properties.id, layer);
+          mymap.setView(e.target.getCenter(), 7);
       }
 
       function addLegend(points) {
@@ -507,17 +514,59 @@
       }
 
       function addBestSegments(segments) {
+        var j = 0;
         for (var seg in segments) {
+          j++;
           curr = JSON.parse(segments[seg]);
           lat = curr[0]['s_lat'];
           lng = curr[0]['s_lng'];
           name = curr[0]['name'];
           id = curr[0]['segment'];
+          labels = [];
+          data = []
+          for (var i=0;i<curr.length;i++) {
+            day = curr[i]['Dow'];
+            num = curr[i]['num_trainings'];
+            labels.push(dow[day]);
+            data.push(parseInt(num));
+          }
           seg_url = segment_url + id;
-          html = "<b>" + name + "</b><p><a href='" + seg_url + "' target='_blank'>See on Strava</a></p>";
-          var marker = L.marker([lat, lng]).addTo(mymap);
-          marker.setOpacity(0.7);
-          marker.bindPopup(html);
+          html = "<div><b>" + name + "</b><a href='" + seg_url + "' target='_blank'>See on Strava</a><canvas id='dowchart'></canvas></div>";
+
+            var marker = L.marker([lat, lng]).addTo(mymap);
+            marker.setOpacity(0.9);
+            var div_chart = $('<canvas id="dowchart-' + j  + '"></canvas>');
+            var div_text = $('<div>' + name + '</div>');
+            var link_strava = $("<a href='" + seg_url + "' target='_blank'>See on Strava</a>");
+            var div_main = $('<div></div>');
+            div_main.append(div_text);
+            div_main.append(link_strava);
+            div_main.append(div_chart);
+            marker.bindPopup(div_main[0]);
+            marker.openPopup();
+
+            new Chart(document.getElementById("dowchart-"+ j), {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: "Number of Rides",
+                      backgroundColor: ["#B05E1C", "#B05E1C","#B05E1C","#B05E1C","#B05E1C","#B05E1C","#B05E1C"],
+                      data: data
+                    }
+                  ]
+                },
+                options: {
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: 'Distribution of Rides over Weekdays'
+                  }
+                }
+            });
+            marker.closePopup();
+
           markers.push(marker);
 
         }
@@ -529,12 +578,12 @@
           "data": {'period': $('#datetimepicker1 input').val()},
           "success": function(data) {
               res = JSON.parse(data);
-               var heat = L.heatLayer(res["res"], {minOpacity: 0.01, radius: 10, blur: 27, maxZoom: 7}).addTo(mymap);
-               heatmap = heat;
                //if (legend === undefined)
                // legend = addLegend(res["legend"]);
                info.update(res['region_name'], res['period'], res['stats']);
                addBestSegments(res['best_segments']);
+               var heat = L.heatLayer(res["res"], {minOpacity: 0.01, radius: 10, blur: 27, maxZoom: 7}).addTo(mymap);
+               heatmap = heat;
                mymap.spin(false);
           },
           "error": function() {

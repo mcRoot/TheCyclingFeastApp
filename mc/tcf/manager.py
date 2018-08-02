@@ -45,6 +45,7 @@ class SegmentsManager():
 
     def __init__(self, config):
         self.segments = pd.read_csv(os.path.join(config.app_config['segments_base_dir'], config.app_config['segments_csv_name']))
+        self.segments.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'avg_grade', 'climb_category', 'points', 'e_lat', 'e_lng', 'climb_category_desc'], inplace=True)
         self.config = config
 
 
@@ -73,6 +74,7 @@ class SegmentsManager():
         df = pd.concat([ref_segments] * 7, ignore_index=True)
         df['Month'] = month
         dow = pd.Series([0, 1, 2, 3, 4, 5, 6])
+        df = df.sort_values(["segment"]).reset_index().drop(columns=['index'])
         df['Dow'] = dow.append([dow] * ref_segments.shape[0], ignore_index=True)
         df['Year_since_kickoff'] = year - self.config.app_config['strava_kickoff_year']
         return df

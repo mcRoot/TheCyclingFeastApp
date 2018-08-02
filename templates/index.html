@@ -26,8 +26,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.css" rel='stylesheet' />
 
-    <!--charting -->
-    <link rel="stylesheet" href="/static/css/suave-charts.css" />
   </head>
 
   <body id="page-top">
@@ -48,13 +46,10 @@
               <a class="nav-link js-scroll-trigger" href="#app">The Application</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#intro">The Project</a>
+              <a class="nav-link js-scroll-trigger" href="#intro">Introduction</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#dataset">The Dataset</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#analysis">Exploratory Analysis</a>
+              <a class="nav-link js-scroll-trigger" href="#dataset">The Project</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#aboutme">About Me</a>
@@ -130,7 +125,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
-            <h2 class="text-white mb-4">The Cycling Feast</h2>
+            <h1 class="text-white mb-4">The Cycling Feast</h1>
             <p class="text-white-50">
               <b>Road cycling</b> and <b>mountain biking</b> have been steadily growing in popularity in recent years due to the
               beneficial effects on health and well-being. This has been fueling an increasing interest in services for amateur riders, ranging from
@@ -155,7 +150,7 @@
 
               Additionally, as can be intuitively seen in the image below
             </p>
-              <p><img class="tcf-opacity-50" src="/static/img/italy-land.png" class="img-fluid" alt=""></p>
+              <p><img class="tcf-opacity-90" src="/static/img/italy-land.png" class="img-responsive" alt=""></p>
             <p class="text-white-50">
               Italy is mostly hills and mountains, precisely, <i>hills and mountains account for around <b>80%</b> of the whole Italy's territory</i>, as such we can safely state that
               climbs alone, beyond being very popular among cyclists, give quite a representative sample of "geographical riding habits" in Italy.
@@ -181,6 +176,10 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
+            <h1 class="text-white mb-4">The Project</h1>
+              <p class="text-white-50">
+              Here we present and discuss every detail related to the project, from the dataset exploited to the analysis performed in order to develop the predictive model exploited in the actual application.
+              </p>
             <h2 class="text-white mb-4">The Dataset</h2>
             <p class="text-white-50">
               The dataset has been generated via exploitation of the <a href="https://strava.github.io/api/v3/" target="_blank">Strava REST API</a>.
@@ -236,7 +235,105 @@
             <li>the <i>rank</i>, i.e. the position of the effort on the leaderboard, based on elapsed time, where 1 means KOM/QOM (King of the Mountain/Queen of the Mountain).</li>
            </ul>
           </p>
-        </div>
+          <h2 class="text-white mb-4">Analysis</h2>
+            <p class="text-white-50">
+                We initially analyzed how amateur cycling has been evolving in Italy over the last years, selecting the period <i>2009 - 2017</i> as a reference <i>time frame</i>: in order to do so we leveraged the data collected from <a href="https://www.strava.com">Strava</a>.
+            </p>
+          <h3 class="text-white mb-4">Number of Kilometers Ridden</h3>
+            <p class="text-white-50">
+                First of all, we focussed on the total number of kilometers ridden by Strava's users over the reference period.
+            </p>
+              <p><img class="tcf-opacity-90" src="/static/img/prj/km-ridden.png" class="img-responsive" alt=""></p>
+              <p class="text-white-50">
+                  As we can see, the growth has been sort of exponential: in particular, focusing on the most recent years (2015-2017), the number of kilometers traveled doubled from 1.5 millions to almost 4 millions of kilometer.
+              <br/><br/>
+                  Of course, we are aware that this exponential trend can suffer from a "technological bias" caused by an increased availability of gps-enabled devices (bike computers, smartphone)
+                  that have made it possible to integrate sport activities with online service such as Strava.
+                  In other words, while in 2009 the number of such devices was low, the availability has been with no doubt much larger in 2015-2017, leading to a possible "technological bias" in the figures.
+                  <br/>
+                  However, even though the number and the availability of such devices in 2009 may have been quite low, starting from 2015, we have witnessed a relative large diffusion and availability of Internet-enabled devices, so that we can assume no "technological bias" affecting the data from 2015 on.
+             <br/><br/>
+              A better measure would perhaps be distance per year <i>normalized by total number of users registered to the platform in a given year</i>: unfortunately Strava does not disclose this information.
+              </p>
+
+            <h3 class="text-white mb-4">Geolocated Number of Training Sessions</h3>
+            <p class="text-white-50">
+                Next, we analyzed the number of training sessions (efforts) per segment, geolocated on a map so as to define a preliminary spatial correlation between users' efforts and segments where the corresponding trainings took place.
+            </p>
+              <p><img class="tcf-opacity-90" src="/static/img/prj/effort-geolocated.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+                  <span class="text-white-50">The chart above shows the geolocated count of segment efforts in four different years taken as reference:</span>
+                  <br/>
+                  <ul class="text-white-50">
+                    <li>2009, selected as the year of the official kickoff of Strava, so that we going to regard efforts' quantities on this year as a sort of baseline for subsequent years.</li>
+                    <li>2013, as we can suppose that the availability of gps enabled sport devices was large enough so as to represent no technological barrier to athletes to access online services such as Strava.</li>
+                    <li>Finally, 2015 and 2017 represent the very recent past allowing to understand what kind of growth in the amateur cyclist community one can expected over a shorter timespan (2 years).</li>
+                  </ul>
+              <span class="text-white-50">Geolocalization on the map was devised by taking start latitude and longitude of each segment and plotting a dot in the corresponding point in the map. As we come closer to 2017, we can see that the number of dots increases (do not take color into account for now): that accounts for the effect of new segments added by users that very same year, in other words segments not available previously. As a consequence, just by looking at the density of dots, we can realized that, while the earlier years 2009 and 2013 witnessed a remarkable growth in the number of segments added to Strava, in 2015 and 2017 the number of new segments reached a "plateau": indeed, looking at 2013 versus 2015 and 2015 versus 2017, it is hard to spot a growth in dots' density. This effect is with no doubt due also to the fact that once a mountain or hill pass got covered by someone who created a segment and publicly shared it, there is no longer need to create a new segment for it. This also tells us that in the space of few years the whole Italy got completely covered on Strava by one or more segments.
+              </span><br/><br/>
+              <span class="text-white-50">The most interesting data, anyway, lies in the color of dots: lighter ones denote a higher number of efforts made on them in the given year. Looking at the evolution depicted in the map it is easy to recognize a strongly growing trend that, we think, can be regarded as a good candidate predictor of the trend in coming years. Indeed, since technology (gps and Internet enabled bike devices) does not represent anymore a barrier for people to join communities like Strava and, consequently, cannot be regarded as a bias on the data, we expect the coming years being revelatory for such a trend and, ultimately, a good reason to further investigate and analyse.
+              </span></div>
+               <p></p>
+              <h3 class="text-white mb-4">Distribution of Rides by Month</h3>
+            <p class="text-white-50">
+                Let's analyse now how users' rides are distributed over the different months of the year: the chart below shows the distribution of rides by month over the whole dataset (considering year range 2009-2017).</p>
+              <p><img class="tcf-opacity-90" src="/static/img/prj/effort-month.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+                  It is sort of easy to get that most of the rides in Italy occurs during <i>summertime</i> (June - August) with a peak in (July). Also, riders seems to be quite active during <i>late Spring</i> (May) and <i>early Fall</i>.
+                  <br/><br/>
+                   This is as well quite understandable as Italy is located in <i>temperate zone</i>. It also prove, as we were expecting, that clearly, climate has an influence on riders' habits so that future correlations with historical weather records would be helpful in devising more accurate predictive models.
+              </div>
+              <p></p>
+              <h3 class="text-white mb-4">Distribution of Rides by Day of Week</h3>
+            <p class="text-white-50">
+                Let's analyse now riders' habit over the week by looking at the fashion rides are distributed among days of week. Again, the chart below shows the distribution of rides by day of week over the whole dataset (considering the usual range 2009-2017).</p>
+              <p><img class="tcf-opacity-90" src="/static/img/prj/effort-dow.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+                  Again, it should come as no surprise that most of the <i>riders</i> active on Strava <i>focus their rides in the weekend</i>, most notably on Sunday: accordingly, day of week can be regarded, as well as month, as a relevant feature for predicting future number of rides.
+              </div>
+              <p></p>
+              <h3 class="text-white mb-4">Distribution of Rides by Geographical Area</h3>
+            <p class="text-white-50">
+               Additionally, in order to see how a specific area might affect the amount of rides, we analyzed the density of rides in the different italian districts over the usual 2009-2017 period.
+               <br/>
+                In order to do so we exploited <a hfer="https://www.carto.com" target="_blank">Carto</a>, an online, "location intelligence" app.
+              <p><img class="tcf-opacity-90" src="/static/img/prj/effort-latlon.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+                  A few patterns can be notices from the above geolocalized plot.
+                  <br/><br/>
+                  First of all, amateur cyclists seem to be more active in North/Central Italy, with the notable exception of east Sicily.
+                  <br/>
+                  Moreover, The Alps, and expecially Dolomites (Northmost region of Italy), show a stunning density of rides: this could be for instance explained by the fact that Dolomites are one of the UNESCO's world heritage sites, as such, visited every year by hundreds of thousands of people from all around the World.
+                  <br/>
+                  The same consideration may even hold for Tuscany and the renowned "Cinque Terre" that both show a very high density of rides.
+                  <br/><br/>
+                  In the end, we believe that geographical location of Strava's segments (latitude/longitude) plays a strong role in predicting future number of rides.
+              </div>
+              <p></p>
+              <h3 class="text-white mb-4">Influence of Accommodation Facilites?</h3>
+            <p class="text-white-50">
+               Does the number of hotels in a particular area have an effect on how many rides occurr on road segments located there? We decided to pick number of hotels as a reference measure to rate how popular an area is for visitors and denote is capability of hosting potential bike riders.
+               <br/><br/>
+               In order to do so, we downloaded a publicly available dataset containing a well-representative list of hotels in Italy along with their corresponding latitude and longitude coordinates.
+                The dataset was downloaded from <a href="http://www.datiopen.it/en/opendata/Mappa_degli_hotel_in_Italia" target="_blank">DatiOpen</a>, one of the largest italian initiatives on Open Data.
+               <br/>
+                Initially, we investigated the geographical density of rides correlated with the quantity of hotels in a specific area as shown in the image below.
+                <p><img class="tcf-opacity-90" src="/static/img/prj/effort-hotel.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+                The heatmap represents the density of rides in the period 2009-2017, with increasing density from green to red: the pattern in this case is clearly the same as the one displayed in previous image.
+                Orange clusters show instead the number of hotels in a given area, making it possible to devise a first simple (but effective) correlation between accommodations and "ride propensity" for different areas in Italy.
+                As we can see, in general, areas with higher ride densities also feature higher concentrations of hotels, showing that hotels can be adopted as an additional feture to build an effective predictive model.
+                 <br/><br/>
+                  Then, via KMeans clustering based on <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.BallTree.html#sklearn.neighbors.BallTree" target="_blank">Scikit-learn's BallTree</a>, with a distance function relying on geodesic distance (via <a href="https://geopy.readthedocs.io/en/stable/" target="_blank">Geopy</a> implementation),
+                  for each Strava segment we devised the following statistical values:
+                  <ul class="text-white-50">
+                      <li>the nearest 100 hotels;</li>
+                      <li>the average distance of those hotels from the segment;</li><
+                      li>the corresponding standard deviation, median, 25 and 75 percentile values;</li>
+                      <li>the number hotels within a 30-km radius.</li>
+                  </ul>
+                  <span class="text-white-50">These values were subsequently used as features for the base dataset of the predictive model at hand.</span>
+              </div>
         </div>
       </div>
     </section>
@@ -372,13 +469,13 @@
       var mymap = L.map('tcf-container').setView([42, 12], 6);
       mymap.options.minZoom = 2;
       mymap.options.maxZoom = 19;
-      var gl = L.mapboxGL({
-          accessToken: 'pk.eyJ1IjoibWNyb290IiwiYSI6ImNqanNwZjM4bTJ5Ynczd3FxY2lhOG9vczUifQ.cdD3Wy507vgPphiKU1Cevg',
-          style: 'https://openmaptiles.github.io/toner-gl-style/style-cdn.json'
-      }).addTo(mymap);
+      /*var gl = L.mapboxGL({
+          accessToken: 'pk.eyJ1IjoibWNyb290IiwiYSI6ImNqa2NiZXFjcDE2dnozbHBuY3Z4eWs4aGwifQ.S5I5W1XsyaTPBGicX2rgfA',
+          style: 'https://openmaptiles.github.io/positron-gl-style/style-cdn.json'
+      }).addTo(mymap);*/
       //mymap.fitWorld();
 
-      /*var CartoDB_VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+      var CartoDB_VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
           subdomains: 'abcd',
           maxZoom: 19
@@ -386,7 +483,7 @@
       var Hydda_RoadsAndLabels = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/roads_and_labels/{z}/{x}/{y}.png', {
           maxZoom: 18,
           attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(mymap);*/
+      }).addTo(mymap);
       mymap.getPane("overlayPane").style.opacity=0.8
 
 
@@ -561,7 +658,7 @@
                   legend: { display: false },
                   title: {
                     display: true,
-                    text: 'Distribution of Rides over Weekdays'
+                    text: 'Distribution of Rides over Week'
                   }
                 }
             });

@@ -86,11 +86,11 @@
             <p class="text-black-50">
               <b>Are you planning to visit Italy and are a eager bike rider?</b> This application helps you find
               the best Italy's locations for bike riders. Enjoy your rides in Italy then!
-            </p>
-             <p class="text-black-50">
-              Just select the period of your visit and, on the map, click on a region you plan to visit.
+              <br><br>
+              Just select the period of your visit (month/year) and, on the map, click on a region you plan to visit.
                Artificial intelligence will crunch numbers under the hood and <b>predict popular areas for cycling</b>,
-               showing also the top-10 climbs in the region.
+               showing also the top-10 climb segments in the region: click on a segment to see the relevant details, in
+                 particular the predicted distribution of rides over different weekdays.
             </p>
             <p class="text-black-50">
               <b>Now you have no more excuse for leaving your bike home!</b>
@@ -114,7 +114,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12 mx-auto">
-            <div id="tcf-container" style="width: 100%; height: 500px; position: relative; outline: none;" />
+            <div id="tcf-container" style="width: 100%; height: 650px; position: relative; outline: none;" />
           </div>
         </div>
       </div>
@@ -296,7 +296,7 @@
             <p class="text-white-50">
                Additionally, in order to see how a specific area might affect the amount of rides, we analyzed the density of rides in the different italian districts over the usual 2009-2017 period.
                <br/>
-                In order to do so we exploited <a hfer="https://www.carto.com" target="_blank">Carto</a>, an online, "location intelligence" app.
+                In order to do so we exploited <a href="https://www.carto.com" target="_blank">Carto</a>, an online, "location intelligence" app.
               <p><img class="tcf-opacity-90" src="/static/img/prj/effort-latlon.png" class="img-responsive" alt=""></p>
               <div class="text-white-50">
                   A few patterns can be notices from the above geolocalized plot.
@@ -315,7 +315,7 @@
                Does the number of hotels in a particular area have an effect on how many rides occurr on road segments located there? We decided to pick number of hotels as a reference measure to rate how popular an area is for visitors and denote is capability of hosting potential bike riders.
                <br/><br/>
                In order to do so, we downloaded a publicly available dataset containing a well-representative list of hotels in Italy along with their corresponding latitude and longitude coordinates.
-                The dataset was downloaded from <a href="http://www.datiopen.it/en/opendata/Mappa_degli_hotel_in_Italia" target="_blank">DatiOpen</a>, one of the largest italian initiatives on Open Data.
+                The dataset was downloaded from <a href="http://www.datiopen.it/en/opendata/Mappa_degli_hotel_in_Italia" target="_blank">DatiOpen.it</a>, one of the largest italian initiatives on Open Data.
                <br/>
                 Initially, we investigated the geographical density of rides correlated with the quantity of hotels in a specific area as shown in the image below.
                 <p><img class="tcf-opacity-90" src="/static/img/prj/effort-hotel.png" class="img-responsive" alt=""></p>
@@ -334,31 +334,140 @@
                   </ul>
                   <span class="text-white-50">These values were subsequently used as features for the base dataset of the predictive model at hand.</span>
               </div>
+              <p></p>
+              <h3 class="text-white mb-4">Additional Charts</h3>
+              <p class="text-white-50">
+                  Following a chart showing the distribution of number of rides as a function of segment's average distance from closest (nearest 100) hotels.
+              </p>
+              <p><img class="tcf-opacity-90" src="/static/img/prj/effort-hoteldistance.png" class="img-responsive" alt=""></p>
+              <div class="text-white-50">
+              It can be clearly seen that most of the rides tend to take place in segments with an average distance from nearby hotels between 16 and 46 km.
+              </div>
+              <p></p>
+              <h2 class="text-white mb-4">Machine Learning</h2>
+               <p class="text-white-50">
+                   The main goal of the project was to develop a predictive model able to predict the number of rides on a specific Strava segment at a given future time.
+                   In order to do so, we relied on a machine-learning approach.
+                   The problem faced here was a typical <i>regression problem</i> where the target is represented by number of rides to predict.
+                   Additionally, it is worth noting that time here plays an important role, as we are aiming at predicting future values: as such it would be essential to introduce validation techniques related to time-series analysis.
+                   <br/>
+                   The most important stage of our work was related to feature engineering since designing good features plays a key role in realizing accurate models.
+               </p>
+              <p></p>
+              <h3 class="text-white mb-4">Feature Engineering</h3>
+               <p class="text-white-50">
+                   In order to devise an effective set of feature to feed the predictive model at hand, we leveraged the analysis shown previously, resulting in the set of features described below.
+               </p>
+                <h4 class="text-white mb-4">Month and Day of Week</h4>
+                <p class="text-white-50">
+                   These features were included in the set of features since seasonality clearly plays a fundamental role in recreational cyclists' habits: as shown above, indeed, mid seasons and summer are the part of the year where most of the rides tend to occur.
+                   Also, weekend is clearly preferred over regural workdays.
+                   <br/>
+                   Both the features are to be intended as categorical.
+               </p>
+                <h4 class="text-white mb-4">Years since Strava Kickoff</h4>
+                <p class="text-white-50">
+                   We have seen previously that Strava has witnessed an exponential growth in terms of number of rides (km ridden) since its kickoff in 2009: this can be regarded as a true drift we need to be taken into account.
+                   <br/>
+                   To this end, when trying to predict how many rides will occur on a specific segment in a particular day on a given month, we are also going to consider how many years has passed since Strava openings.
+                   In order to do so we can simply take the year and subtract 2009 (the year Strava was launched): accordingly, if we want to predict the number of rides occurring on a segment in the Sundays of August 2019, "years since kickoff" is going to have a value of 10.
+               </p>
+                <h4 class="text-white mb-4">Geographical Location of Segments</h4>
+                <p class="text-white-50">
+                   As seen during analysis, location of Strava segments is a good predictor for assessing the trend of rides on those, as such, we decided to include in the set of features each segment's <i>start latitude and longitude</i>.
+               </p>
+                <h4 class="text-white mb-4">Hotels</h4>
+                <p class="text-white-50">
+                   The availability of accommodation structures is also a factor affecting segments' appeal. Accordingly, we exploited the dataset on Italy's hotels and, for each segment, devised the following set of features:
+                    <ul class="text-white-50">
+                      <li>the nearest 100 hotels;</li>
+                      <li>the average distance of those hotels from the segment;</li>
+                      <li>the corresponding standard deviation, median, 25 and 75 percentile values;</li>
+                      <li>the number hotels within a 30-km radius.</li>
+                    </ul>
+               </p>
+               <h4 class="text-white mb-4">Summing up</h4>
+                <p class="text-white-50">
+                   As a result of feature engineering process, the machine-learning-ready data is composed so as to feature, for each segment, several samples: specifically, one for each day of the week of every month for each of the years from 2009 to 2017 (these are represented in terms of "years passed since Strava launch").
+                   <br/>
+                    Furthermore, for each sample, reference latitude and longitude, as well as statistical values regarding hotels, are also specified as additional features.
+               </p>
+               <h3 class="text-white mb-4">Designing a Regression Model</h3>
+               <p class="text-white-50">
+                   Well-established machine learning techniques were adopted to devise a predictive model of the number of rides.
+                   <br/>
+                   The model was developed on <a href="http://scikit-learn.org/" target="_blank">Scikit-learn</a> via exploitation of <b>esemble techniques</b> resulting in a combination of two regressors in sequence:
+                   <ul class="text-white-50">
+                    <li>a <b>linear regressor</b> built with a <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html" target="_blank">Ridge</a> model;</li>
+                    <li>a <b>random-forest regressor</b> (<a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html" target="_blank">RandomForestRegressor</a>) fit on the residuals (errors) resulting from fitting the linear model.</li>
+                    </ul>
+               </p>
+               <h4 class="text-white mb-4">Train/Test Set and Validation</h4>
+               <p class="text-white-50">
+                   As time plays a key role in predicting number of rides, the full dataset was spit in a train and a test set by relying on an approach typical of time-series analysis: all the samples referring to the period 2009-2016 were included in the train set, while the remaining samples regarding year 2017 went to form the test set:
+                   accordingly, the number of samples in the resulting training set was <b>485,567</b>, while the test set resulted in <b>201,057</b> samples.
+                   <br>
+                   In fact, given the strong temporal nature of the data, preserving the order of samples is fundamental when splitting the dataset.
+                   <br><br>
+                   As far as validation is concerned, the model was cross-validated adopting a well-established time-series-analysis techniques called <b>forward chaining</b>, which is provided by Scikit-learn in <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html" target="_blank">TimeSeriesSplit</a>.
+                   <br>
+                   By relying on TimeSeriesSplit, cross-validation was then performed by considering <b>3 splits</b> and adopting <b>grid search</b> (<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html" target="_blank">GridSearchCV</a> on Scikit-learn) to investigate the most-effective set of hyperparameters.
+                   <br><br>
+                   The aforementioned cross-validation process resulted in the following hyperparameter values:
+                    <ul class="text-white-50">
+              <li>A regularization hyperparameter <b>alpha</b> equal to <b>0.001</b> on the ridge linear model.</li>
+                    <li>As far as random forest is concerned, the following values were instead found:</li>
+              <ul class="text-white-50">
+                  <li><b>max features</b> = <b>0.6</b></li>
+                  <li><b>number of decision trees in the ensemble</b> = <b>40</b></li>
+              </ul>
+                    </ul>
+               </p>
+              <h4 class="text-white mb-4">Results</h4>
+               <p class="text-white-50">
+                   Predicting on the test set, the model achieved the following scores:
+              <ul class="text-white-50">
+                  <li>an <b>R<sup>2</sup> score</b> or <b>coefficient of determination</b> equal to  a <b>0.67</b> level of explained variance.</li>
+                  <li>A <b>mean absolute error</b>  corresponding to <b>4.3</b> rides.</li>
+              </ul>
+               <p class="text-white-50">
+              The following picture depicts the values predicted by model on (part) of the test set (green line) where blue dots represent instead actual number of rides.
+               </p><p class="text-white-50"><img class="tcf-opacity-10" style="width:60%;" src="/static/img/prj/model-prediction.png" class="img-responsive" alt="">
+               </p>
+              <h2 class="text-white mb-4">Designing the Actual Application</h2>
+               <p class="text-white-50">
+                   Starting from the regressor model devised, the aim of the project was to build an application to help amateur riders find the most popular places to ride in Italy, according to the period of the year they intend to visit a specific region.
+                   <br>
+                   In order to do so, we developed <a href="#app" target="_blank">The Cycling Feast Application</a> as an interactive map where the user can specify the month and the year she intends to ride in Italy; then, clicking on a particular italian region, the underlying regressor model will make predictions on a dataset structured in this way:
+                   for each Strava segment in the region a sample is created for each day of the week (for a total of 7 samples per segment), adopting the selected month as the value for the month feature and calculating the value of "years since kickoff" accordingly to the year chosen by the user.
+                   <br>
+                   The resulting dataset sent to regressor for prediction has a size corresponding to <b>#segments in the region x 7</b>.
+                   <br>
+                   The predicted values are then analyzed via a Kernel Density Estimation so as to build a heatmap of ride density in the region. Additionally, the 10 segments featuring the highest number of total rides predicted are shown on the map, so as to help the user decide where to ride.
+                   Also, clicking on each "best segment" shows additional details such as, for instance, the predicted distribution of rides over the different days of the week.
+               </p>
+              <h2 class="text-white mb-4">Future Work</h2>
+               <p class="text-white-50">
+                   Where are we going to go from here? This remains indeed a very preliminary work with several further analyses and improvements to be made.
+                   <br>
+                   A first improvement would be of course that of expanding the number of segments to account for as well as to further investigate feature engineering.
+                   This could involve exploiting new data, for instance data reporting historical weather conditions in Italy.
+                   <br>
+                   Then, in order to keep the model always up to date, we will introduce <b>online learning</b> so as to fit the model also on latest rides recorded on Strava.
+               </p>
         </div>
-      </div>
+        </div></div>
     </section>
 
-    <section id="analysis" class="about-section text-left">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <h2 class="text-white mb-4">Exploratory Analysis</h2>
-            <p class="text-white-50">
-
-          </p>
-        </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Signup Section -->
-    <section id="signup" class="signup-section">
+    <section id="aboutme" class="signup-section">
       <div class="container">
         <div class="row">
           <div class="col-md-10 col-lg-8 mx-auto text-center">
 
             <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-            <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+            <h2 class="text-white mb-5">About Me</h2>
 
             <form class="form-inline d-flex">
               <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
@@ -468,17 +577,16 @@
   <script>
       var mymap = L.map('tcf-container').setView([42, 12], 6);
       mymap.options.minZoom = 2;
-      mymap.options.maxZoom = 19;
+      mymap.options.maxZoom = 12;
       /*var gl = L.mapboxGL({
           accessToken: 'pk.eyJ1IjoibWNyb290IiwiYSI6ImNqa2NiZXFjcDE2dnozbHBuY3Z4eWs4aGwifQ.S5I5W1XsyaTPBGicX2rgfA',
           style: 'https://openmaptiles.github.io/positron-gl-style/style-cdn.json'
       }).addTo(mymap);*/
-      //mymap.fitWorld();
 
       var CartoDB_VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
           subdomains: 'abcd',
-          maxZoom: 19
+          maxZoom: 12
       }).addTo(mymap);
       var Hydda_RoadsAndLabels = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/roads_and_labels/{z}/{x}/{y}.png', {
           maxZoom: 18,
@@ -516,7 +624,7 @@
             td.innerHTML += 0.4 + '&nbsp;&nbsp;&nbsp;' + 0.6 + '&nbsp;&nbsp;&nbsp;' + 0.7 + '&nbsp;&nbsp;&nbsp;' + 0.8 + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + 1;
 
             var c = L.DomUtil.create('canvas')
-            c.setAttribute('height', '60')
+            c.setAttribute('height', '40')
             var ctx = c.getContext("2d");
             var grd = ctx.createLinearGradient(0, 0, 240, 0);
             grd.addColorStop(0.4, "blue");
@@ -618,6 +726,10 @@
           lat = curr[0]['s_lat'];
           lng = curr[0]['s_lng'];
           name = curr[0]['name'];
+          loc_name = curr[0]['loc_name'];
+          avg_grade = curr[0]['avg_grade'];
+          distance = parseFloat(curr[0]['distance'])/1000;
+          distance = distance.toFixed(2);
           id = curr[0]['segment'];
           labels = [];
           data = []
@@ -628,16 +740,14 @@
             data.push(parseInt(num));
           }
           seg_url = segment_url + id;
-          html = "<div><b>" + name + "</b><a href='" + seg_url + "' target='_blank'>See on Strava</a><canvas id='dowchart'></canvas></div>";
+          html = "<div><b>" + name + " - " + loc_name + "</b><br/>" + distance + " km - avg. grade " + avg_grade + "%<br/><a href='" + seg_url + "' target='_blank'>More on Strava</a><br/></div>";
 
             var marker = L.marker([lat, lng]).addTo(mymap);
             marker.setOpacity(0.9);
             var div_chart = $('<canvas id="dowchart-' + j  + '"></canvas>');
-            var div_text = $('<div>' + name + '</div>');
-            var link_strava = $("<a href='" + seg_url + "' target='_blank'>See on Strava</a>");
+            var div_text = $(html);
             var div_main = $('<div></div>');
             div_main.append(div_text);
-            div_main.append(link_strava);
             div_main.append(div_chart);
             marker.bindPopup(div_main[0]);
             marker.openPopup();

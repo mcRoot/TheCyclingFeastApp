@@ -49,7 +49,7 @@
     color: #303030;
   }
   #mainNav .nav-link:hover {
-    color: rgba(255, 255, 255, 0.75);
+    color: #B05E1C;
   }
   #mainNav .nav-link:active {
     color: white;
@@ -161,11 +161,11 @@
 
 .about-section {
   padding-top: 10rem;
-  background: linear-gradient(to bottom, #161616 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.8) 100%);
+  background: linear-gradient(to bottom, #161616 0%, rgba(22, 22, 22, 1.0) 85%, rgba(22, 22, 22, 0.9) 100%);
 }
 
 .about-section p {
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
 }
 
 .projects-section {

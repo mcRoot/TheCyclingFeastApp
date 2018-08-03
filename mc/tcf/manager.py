@@ -26,7 +26,7 @@ class MLManager():
         total_num_rides = df_sorted['num_trainings'].sum()
         min_rides = df_sorted['num_trainings'].min()
         max_rides = df_sorted['num_trainings'].max()
-        best_segments = X[X['segment'].isin(df_sorted.index.values)].sort_values(["segment", "Dow"])[['s_lat', 's_lng', "roads", "loc_name", "name", "Dow", "segment", "num_trainings"]]
+        best_segments = X[X['segment'].isin(df_sorted.index.values)].sort_values(["segment", "Dow"])[['s_lat', 's_lng', "roads", "avg_grade", "distance", "loc_name", "name", "Dow", "segment", "num_trainings"]]
         res = np.vstack([df_kde['s_lat'], df_kde['s_lng']]).T
         json_segments = {}
         for seg in best_segments['segment'].unique():
@@ -45,7 +45,7 @@ class SegmentsManager():
 
     def __init__(self, config):
         self.segments = pd.read_csv(os.path.join(config.app_config['segments_base_dir'], config.app_config['segments_csv_name']))
-        self.segments.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'avg_grade', 'climb_category', 'points', 'e_lat', 'e_lng', 'climb_category_desc'], inplace=True)
+        self.segments.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'climb_category', 'points', 'e_lat', 'e_lng', 'climb_category_desc'], inplace=True)
         self.config = config
 
 

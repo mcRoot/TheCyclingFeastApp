@@ -16,7 +16,8 @@ class MLManager():
     def do_density(self, X, y_hat, region, period):
         X['num_trainings'] = y_hat
         df_sorted = X.groupby("segment").aggregate({"num_trainings": "sum", "s_lat": "first", "s_lng": "first"})
-        df_kde = df_sorted.set_index(['s_lat', 's_lng'])['num_trainings'].repeat(np.log(df_sorted['num_trainings']).astype(int)).reset_index()
+        df_sorted['num_trainings'] = np.where(df_sorted['num_trainings'] < 0, 0, df_sorted['num_trainings'])
+        df_kde = df_sorted.set_index(['s_lat', 's_lng'])['num_trainings'].repeat(df_sorted['num_trainings'].astype(int)).reset_index()
         X['road_index'] = X['roads'] + X['loc_name'].str.strip()
         df_sorted = pd.merge(df_sorted, X[['road_index', 'segment']], left_on='segment', right_on='segment').drop_duplicates(subset='segment', keep='first')
         df_sorted = df_sorted.sort_values("num_trainings", ascending=False)#[0:10]
